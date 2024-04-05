@@ -1,0 +1,74 @@
+#include <iostream>
+#include <queue>
+using namespace std ;
+
+const int MAXN = 1010;
+
+struct estado{
+    int x , y , d ;
+};
+
+int matrix[MAXN][MAXN];
+bool visitados[MAXN][MAXN];
+    
+int n , m , minimo ;
+
+int movimientos[2][2] = {{0,1} , {1,0}};
+
+int main(){
+    cin >> n >> m ;
+    
+
+    
+    for(int i = 0 ; i < n ; i++){
+        for(int j = 0 ; j < m ; j++){
+            cin >> matrix[i][j];
+        }
+    }
+    
+    queue <estado> pos;
+    pos.push({0 , 0 , matrix[0][0]});
+    
+    visitados[n-1][m-1] = false;
+    
+    while(!pos.empty()){
+        estado actual = pos.front();
+        pos.pop();
+        
+        if(visitados[actual.x][actual.y]) continue; // ya he pasado por aqui 
+        
+        visitados[actual.x][actual.y] = true; // Si aun no , lo marco
+        
+        if(actual.x == n-1 && actual.y == m-1){ // Ya he llegado , no me importa si ya se ha visitado
+        
+            if(minimo == 0 ){
+                minimo = actual.d;
+            }else{
+                minimo = min(minimo , actual.d);
+            }
+            
+            continue;
+        }
+        
+              for(int i = 0 ; i < 2 ; i++){
+            estado siguiente; 
+            siguiente.x = actual.x + movimientos[i][0]; // a la derecha
+            siguiente.y = actual.y + movimientos[i][1]; // a la izquierda
+            siguiente.d = actual.d + matrix[siguiente.x][siguiente.y]; // vamos sumando los movimientos
+            
+            
+            if(siguiente.x < n){
+                if(siguiente.y < m){
+                    if(!visitados[siguiente.x][siguiente.y]){
+                       pos.push(siguiente); 
+                    } 
+                }
+            }
+            
+          }
+       
+    }
+     cout << minimo ;
+
+    return 0;
+}
